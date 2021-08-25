@@ -94,7 +94,7 @@ function engine:Hook()
 		run.RenderStepped:Connect(function()
 			setsimulationradius(1e308, 1/0)
 		end),
-		run.Hearbeat:Connect(function()
+		run.Heartbeat:Connect(function()
 			setsimulationradius(1e308, 1/0)
 		end)
 	}
