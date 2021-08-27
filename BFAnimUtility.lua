@@ -1,4 +1,5 @@
 -- ceat#6144
+-- from: https://github.com/ceat-ceat/BecomeFumoStuff/blob/main/BFAnimUtility.lua
 local plrs,run = game:GetService("Players"),game:GetService("RunService")
 local localplayer = plrs.LocalPlayer
 function create(class,prop)
