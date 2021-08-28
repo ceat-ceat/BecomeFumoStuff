@@ -37,50 +37,56 @@ local config,data,connections = {
 		RLeg = cn(0, 0.4085, 0),
 		Head = cn(0, -0.7, 0.075)
 	}
-},{Parts={},BoundToCharacter=false},{}
+},{Parts={},BoundToCharacter=false,Container=nil},{}
+
+function bindpart(part0,part1,c0,name)
+	assert(data.Container,"Constraint container not found. Use _G.BFAnim:Hook()")
+	local name = tostring(name) or part1.Name
+	local a0,a1 = create("Attachment",{
+		Parent = part1,
+		Name = name,
+		CFrame = typeof(c0) == "CFrame" and c0:Inverse() or cn()
+	}),create("Attachment",{
+		Parent = part0,
+		Name = name
+	})
+	local alignp,aligno = create("AlignPosition",{
+		Parent = data.Container,
+		Name = string.format("AlignP %s",name),
+		MaxForce = 10000,
+		Responsiveness = 200,
+		Attachment0 = a0,
+		Attachment1 = a1,
+	}),create("AlignOrientation",{
+		Parent = data.Container,
+		Name = string.format("AlignO %s",name),
+		MaxTorque = 10000,
+		Responsiveness = 200,
+		Attachment0 = a0,
+		Attachment1 = a1,
+	})
+	data.Parts[name].Mover = a1
+	_G.BFAnim.Offsets[name] = _G.BFAnim.Offsets[name] or cn()
+end
 
 function engine:Hook()
 	assert(not data.BoundToCharacter,"Already bound to character")
 	data.BoundToCharacter = true
 	local chr = localplayer.Character
 	assert(chr,"No player character found")
-	data.Parts = {
+	data.Parts,data.Container = {
 		Head = {Part=chr:WaitForChild("Head"):WaitForChild("Head"),AnchorPart=chr:WaitForChild("Torso"):WaitForChild("Torso")},
 		Torso = {Part=chr.Torso.Torso,AnchorPart=chr:WaitForChild("HumanoidRootPart")},
 		LArm = {Part=chr:WaitForChild("LArm"):WaitForChild("LArm"),AnchorPart=chr.Torso.Torso},
 		RArm = {Part=chr:WaitForChild("RArm"):WaitForChild("RArm"),AnchorPart=chr.Torso.Torso},
 		LLeg = {Part=chr:WaitForChild("LLeg"):WaitForChild("LLeg"),AnchorPart=chr.Torso.Torso},
 		RLeg = {Part=chr:WaitForChild("RLeg"):WaitForChild("RLeg"),AnchorPart=chr.Torso.Torso}
-	}
-	local constraintcontainer = create("Hole",{
+	},create("Hole",{
 		Parent = chr,
 		Name = "BFAnimConstraints"
 	})
 	for i, v in next, data.Parts do
-		local a0,a1 = create("Attachment",{
-			Parent = v.Part,
-			Name = i,
-			CFrame = config.AttachmentOffsets[i]
-		}),create("Attachment",{
-			Parent = v.AnchorPart,
-			Name = i
-		})
-		local alignp,aligno = create("AlignPosition",{
-			Parent = constraintcontainer,
-			Name = string.format("AlignP %s",i),
-			MaxForce = 10000,
-			Responsiveness = 200,
-			Attachment0 = a0,
-			Attachment1 = a1,
-		}),create("AlignOrientation",{
-			Parent = constraintcontainer,
-			Name = string.format("AlignO %s",i),
-			MaxTorque = 10000,
-			Responsiveness = 200,
-			Attachment0 = a0,
-			Attachment1 = a1,
-		})
-		v.Mover = a1
+		bindpart(v.AnchorPart,v.Part,config.AttachmentOffsets[i]:Inverse(),i)
 	end
 	for i, v in next, chr.Torso.Torso:GetChildren() do
 		if v:IsA("Motor6D") then
@@ -90,22 +96,34 @@ function engine:Hook()
 	chr.HumanoidRootPart.Torso:Destroy()
 	connections = {
 		run.Stepped:Connect(function()
-			setsimulationradius(1e308, 1/0)
+			--setsimulationradius(1e308, 1/0)
 			for i, v in next, data.Parts do
 				local offset = _G.BFAnim.Offsets[i]
 				if offset and typeof(offset) == "CFrame" and v.Mover then
-					v.Mover.CFrame = _G.BFAnim.Offsets[i]
+					v.Mover.CFrame = _G.BFAnim.Offsets[i] or cn()
 				end
 			end
-			setsimulationradius(1e308, 1/0)
+			--setsimulationradius(1e308, 1/0)
 		end),
 		run.RenderStepped:Connect(function()
-			setsimulationradius(1e308, 1/0)
+			--setsimulationradius(1e308, 1/0)
 		end),
 		run.Heartbeat:Connect(function()
-			setsimulationradius(1e308, 1/0)
+			--setsimulationradius(1e308, 1/0)
 		end)
 	}
+end
+
+function engine:AddPart(name,params)
+	assert(data.BoundToCharacter,"Not bound to character. Use _G.BFAnim:Hook()")
+	assert(tostring(name),"Argument 1 invalid or nil")
+	assert(not data.Parts[tostring(name)],"Name is already in use")
+	assert(typeof(params) == "table","Argument 2 invalid or nil")
+	assert(typeof(params.Part0) == "Instance" and params.Part0:IsA("BasePart") and typeof(params.Part1) == "Instance" and params.Part1:IsA("BasePart"),"Part0 and Part1 invalid or nil")
+	assert(params.Part1 ~= localplayer.Character:FindFirstChild("HumanoidRootPart"),"Not allowed to bind HumanoidRootPart")
+	data.Parts[name] = {Part=params.Part1,AnchorPart=params.Part0}
+	bindpart(params.Part0,params.Part1,params.C0,name)
+	return true
 end
 
 localplayer.CharacterAdded:Connect(function()
