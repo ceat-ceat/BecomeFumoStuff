@@ -96,20 +96,12 @@ function engine:Hook()
 	chr.HumanoidRootPart.Torso:Destroy()
 	connections = {
 		run.Stepped:Connect(function()
-			--setsimulationradius(1e308, 1/0)
 			for i, v in next, data.Parts do
 				local offset = _G.BFAnim.Offsets[i]
 				if offset and typeof(offset) == "CFrame" and v.Mover then
 					v.Mover.CFrame = _G.BFAnim.Offsets[i] or cn()
 				end
 			end
-			--setsimulationradius(1e308, 1/0)
-		end),
-		run.RenderStepped:Connect(function()
-			--setsimulationradius(1e308, 1/0)
-		end),
-		run.Heartbeat:Connect(function()
-			--setsimulationradius(1e308, 1/0)
 		end)
 	}
 end
