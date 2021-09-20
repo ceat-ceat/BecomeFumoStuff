@@ -102,6 +102,11 @@ function engine:Hook()
 					v.Mover.CFrame = _G.BFAnim.Offsets[i] or cn()
 				end
 			end
+		end),
+		run.Heartbeat:Connect(function()
+			for i, v in next, data.Parts do
+				v.Part.Velocity += Vector3.new(0,1,0)
+			end
 		end)
 	}
 end
