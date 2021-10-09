@@ -36,13 +36,12 @@ local open = false
 local reference = {SortOrders=Enum.SortOrder:GetEnumItems()}
 
 local baseinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/roblox-script-utils/main/custominstance.lua"))()
---local baseinstance = require(script:WaitForChild("BaseInstance"))
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/roblox-script-utils/main/fakebindable.lua"))()
---require(script:WaitForChild("FakeBindable"))
 
 -- ui setup
 
 local settingsframe = maingui:WaitForChild("SettingsFrame")
+local closeevent = settingsframe:WaitForChild("Close")
 local button = create{
 	Class = "TextButton",
 	BackgroundTransparency = 0.95,
@@ -142,6 +141,7 @@ local tweens = {
 button.MouseButton1Click:Connect(function()
 	open = not open
 	tweens[open]:Play()
+	closeevent:Fire()
 end)
 frame.Close.MouseButton1Click:Connect(function()
 	open = false
@@ -597,5 +597,5 @@ bbf.create,bbf.tween,bbf.Screen = create,tween,screengui
 _G.BBF = bbf
 
 if not game:IsLoaded() then game.Loaded:Wait() end
-bbf.notify("BBF Beta ver is now running successfully!",3)
+bbf.notify("BBF dev ver is now running successfully!",3)
 return _G.BBF
