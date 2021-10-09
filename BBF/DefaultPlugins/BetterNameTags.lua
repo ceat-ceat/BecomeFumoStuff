@@ -1,5 +1,4 @@
 local plrs = game:GetService("Players")
---local BBF = require(script.Parent:WaitForChild("BBF"))
 local BBF = loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/BecomeFumoStuff/main/BBF/BBF.lua"))()
 if _G.BBFbnt then BBF.warn("BetterNameTags is already running, silly!",3) return end
 local localplayer = plrs.LocalPlayer or plrs:GetPropertyChangedSignal("LocalPlayer"):Wait()
@@ -71,7 +70,7 @@ function setupplr(plr)
 		Parent = screengui,
 		Name = plr.Name,
 		Active = true,
-		plr.Name == plr.DisplayName and nil or {
+		{
 			Class = "TextLabel",
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1, 0,1, 0),
@@ -80,6 +79,7 @@ function setupplr(plr)
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextScaled = true,
 			TextStrokeTransparency = 0,
+			Visible = plr.Name ~= plr.DisplayName,
 			ZIndex = 2,
 			Name = "Display"
 		},
@@ -129,19 +129,16 @@ function setupplr(plr)
 		if not toclipboard then warn("Incompatible exploit, could not copy username") return end
 		toclipboard(plr.Name)
 	end)
-	if plr.Character then
-		nametag.Adornee = plr.Character:WaitForChild("Head"):WaitForChild("Head")
-		info.real = plr.Character.Head.Head:WaitForChild("NameTag")
-		info.real.Enabled = not settings.enabled.Value
-	end
-	plr.CharacterAdded:Connect(function(chr)
+	local function setupchr(chr)
 		local head = chr:WaitForChild("Head"):WaitForChild("Head")
-		spawn(function()
-			local tag = head:WaitForChild("NameTag")
-			tag.Enabled,info.real = not settings.enabled.Value,tag
-		end)
-		nametag.Adornee,info.Hovering = head,false
-	end)
+		nametag.Adornee = head
+		local realnametag = head:WaitForChild("NameTag")
+		info.real,realnametag.Enabled = realnametag,not settings.enabled.Value
+		nametag.StudsOffset = realnametag.StudsOffset
+		info.Hovering = false
+	end
+	if plr.Character then setupchr(plr.Character) end
+	plr.CharacterAdded:Connect(setupchr)
 end
 
 for i, v in next, plrs:GetPlayers() do
