@@ -20,7 +20,7 @@ function tween(inst,prop,dur,dir,eas)
 	return ts:Create(inst,TweenInfo.new(dur,eas or Enum.EasingStyle.Quad,dir or Enum.EasingDirection.Out),prop)
 end
 
-if _G.BBF then startergui:SetCore("SendNotification",{Title="BBF",Text="BBF is already running"}) return end
+if _G.BBF then return _G.BBF end
 local bbf = {}
 local localplayer = plrs.LocalPlayer
 local maingui = localplayer:WaitForChild("PlayerGui"):WaitForChild("MainGui")
