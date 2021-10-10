@@ -60,7 +60,6 @@ local window = BBF.new("BetterNameTags",Vector2.new(0.25, 0.7))
 
 for i = 1, 5 do
 	local setting = settings[settings.Ids[i][2]]
-	print(settings.Ids[i][2],setting.Value)
 	local j = BBF.createElement("Boolean w/ Label",{Default=setting.Value,Position=Vector2.new(0.133, 0.208+0.14*(i-1)),Size=Vector2.new(0.75, 0.104),ButtonSize=0.2,Text=settings.Ids[i][1],PropertyOverrides={
 		Parent = window.Frame
 	}})
