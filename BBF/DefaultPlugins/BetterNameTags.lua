@@ -44,7 +44,7 @@ end
 
 
 local success,data = pcall(readfile,"BBF_BNT_SETTINGS.json")
-print(succees,data)
+print(success,data)
 if success then
 	local decoded,newdata = pcall(http.JSONDecode,http,data)
 	if decoded then
