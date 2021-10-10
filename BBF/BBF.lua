@@ -597,5 +597,5 @@ bbf.create,bbf.tween,bbf.Screen = create,tween,screengui
 _G.BBF = bbf
 
 if not game:IsLoaded() then game.Loaded:Wait() end
-bbf.notify("BBF dev ver is now running successfully!",3)
+bbf.notify("BBF Beta ver is now running successfully!",3)
 return _G.BBF
