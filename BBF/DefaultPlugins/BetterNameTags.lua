@@ -1,4 +1,4 @@
-local plrs = game:GetService("Players")
+local plrs,http = game:GetService("Players"),game:GetService("HttpService")
 local BBF = loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/BecomeFumoStuff/main/BBF/BBF.lua"))()
 if _G.BBFbnt then BBF.warn("BetterNameTags is already running, silly!",3) return end
 local localplayer = plrs.LocalPlayer or plrs:GetPropertyChangedSignal("LocalPlayer"):Wait()
@@ -42,11 +42,21 @@ local settings do
 	}
 end
 
+
+local success,data = pcall(readfile,"BBF_BNT_SETTINGS.json")
+if success then
+	settings.showdisplayname.Value = typeof(data.sdn) == "boolean" and data.sdn or settings.showdisplayname.Value
+	settings.showusername.Value = typeof(data.sun) == "boolean" and data.sun or settings.showusername.Value
+	settings.reversenames.Value = typeof(data.rn) == "boolean" and data.rn or settings.reversenames.Value
+	settings.enabled.Value = typeof(data.enabled) == "boolean" and data.enabled or settings.enabled.Value
+	settings.copyusernameonclick.Value = typeof(data.cunoc) == "boolean" and data.cunoc or settings.copyusernameonclick.Value
+end
+
 local window = BBF.new("BetterNameTags",Vector2.new(0.25, 0.7))
 
 for i = 1, 5 do
 	local setting = settings[settings.Ids[i][2]]
-	local j = BBF.createElement("Boolean w/ Label",{Default=i~=4,Position=Vector2.new(0.133, 0.208+0.14*(i-1)),Size=Vector2.new(0.75, 0.104),ButtonSize=0.2,Text=settings.Ids[i][1],PropertyOverrides={
+	local j = BBF.createElement("Boolean w/ Label",{Default=setting.Value,Position=Vector2.new(0.133, 0.208+0.14*(i-1)),Size=Vector2.new(0.75, 0.104),ButtonSize=0.2,Text=settings.Ids[i][1],PropertyOverrides={
 		Parent = window.Frame
 	}})
 	j.ValueChanged:Connect(function(value)
@@ -146,6 +156,10 @@ for i, v in next, plrs:GetPlayers() do
 end 
 plrs.PlayerAdded:Connect(setupplr)
 plrs.PlayerRemoving:Connect(function(plr)
+	if plr == localplayer then
+		local savedata = {sdn=settings.showdisplayname.Value,sun=settings.showusername.Value,rn=settings.reversenames.Value,enabled=settings.enabled.Value,cunoc=settings.copyusernameonclick.Value}
+		pcall(writefile,"BBF_BNT_SETTINGS.json",http:JSONEncode(savedata))
+	end
 	nametags[plr].BB:Destroy()
 	nametags[plr] = nil
 end)
