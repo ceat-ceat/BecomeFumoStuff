@@ -62,7 +62,7 @@ for i = 1, 5 do
 	local j = BBF.createElement("Boolean w/ Label",{Default=setting.Value,Position=Vector2.new(0.133, 0.208+0.14*(i-1)),Size=Vector2.new(0.75, 0.104),ButtonSize=0.2,Text=settings.Ids[i][1],PropertyOverrides={
 		Parent = window.Frame
 	}})
-	setting.Update(setting.Value)
+	if setting.Update then setting.Update(setting.Value) end
 	j.ValueChanged:Connect(function(value)
 		setting.Value = value
 		if setting.Update then setting.Update(value) end
