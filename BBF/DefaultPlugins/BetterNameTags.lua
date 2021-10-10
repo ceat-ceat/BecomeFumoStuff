@@ -34,11 +34,11 @@ local settings do
 		copyusernameonclick = {Value=true},
 		enabled = {Value=true,Update=function(value)
 			for i, v in next, nametags do
-				v.BB.Enabled,v.real.Enabled  = value,not value -- error point
+				v.BB.Enabled,v.real.Enabled  = value,not value
 			end
 		end},
 		buttons = {},
-		Ids = {{"Enabled","enabled"},{"Show DisplayNames","showdisplayname"},{"Show UserNames","showusername"},{"Reverse Names","reversenames"},{"Copy UserName on click","copyusernameonclick"}}
+		Ids = {{"Enabled","enabled","enabled"},{"Show DisplayNames","showdisplayname","sdn"},{"Show UserNames","showusername","sun"},{"Reverse Names","reversenames","rn"},{"Copy UserName on click","copyusernameonclick","cunoc"}}
 	}
 end
 
@@ -47,11 +47,12 @@ local success,data = pcall(readfile,"BBF_BNT_SETTINGS.json")
 if success then
 	local decoded,newdata = pcall(http.JSONDecode,http,data)
 	if decoded then
-		settings.showdisplayname.Value = typeof(newdata.sdn) == "boolean" and newdata.sdn or settings.showdisplayname.Value
-		settings.showusername.Value = typeof(newdata.sun) == "boolean" and newdata.sun or settings.showusername.Value
-		settings.reversenames.Value = typeof(newdata.rn) == "boolean" and newdata.rn or settings.reversenames.Value
-		settings.enabled.Value = typeof(newdata.enabled) == "boolean" and newdata.enabled or settings.enabled.Value
-		settings.copyusernameonclick.Value = typeof(newdata.cunoc) == "boolean" and newdata.cunoc or settings.copyusernameonclick.Value
+		for i, v in next, settings.Ids do
+			local setting,val = settings[v[2]],newdata[v[3]]
+			if typeof(val) ~= "boolean" then val = settings.Value end
+			setting.Value = val
+			if setting.Update then setting.Update(setting.Value) end
+		end
 	end
 end
 
@@ -59,10 +60,10 @@ local window = BBF.new("BetterNameTags",Vector2.new(0.25, 0.7))
 
 for i = 1, 5 do
 	local setting = settings[settings.Ids[i][2]]
+	print(settings.Ids[i][2],setting.Value)
 	local j = BBF.createElement("Boolean w/ Label",{Default=setting.Value,Position=Vector2.new(0.133, 0.208+0.14*(i-1)),Size=Vector2.new(0.75, 0.104),ButtonSize=0.2,Text=settings.Ids[i][1],PropertyOverrides={
 		Parent = window.Frame
 	}})
-	if setting.Update then setting.Update(setting.Value) end
 	j.ValueChanged:Connect(function(value)
 		setting.Value = value
 		if setting.Update then setting.Update(value) end
@@ -161,7 +162,10 @@ end
 plrs.PlayerAdded:Connect(setupplr)
 plrs.PlayerRemoving:Connect(function(plr)
 	if plr == localplayer then
-		local savedata = {sdn=settings.showdisplayname.Value,sun=settings.showusername.Value,rn=settings.reversenames.Value,enabled=settings.enabled.Value,cunoc=settings.copyusernameonclick.Value}
+		local savedata = {}
+		for i, v in next, settings.Ids do
+			savedata[v[3]] = settings[v[2]].Value
+		end
 		pcall(writefile,"BBF_BNT_SETTINGS.json",http:JSONEncode(savedata))
 	end
 	nametags[plr].BB:Destroy()
