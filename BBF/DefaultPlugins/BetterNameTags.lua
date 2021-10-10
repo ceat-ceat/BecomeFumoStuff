@@ -46,7 +46,9 @@ end
 local success,data = pcall(readfile,"BBF_BNT_SETTINGS.json")
 print(success,data)
 if success then
+	print("success")
 	local decoded,newdata = pcall(http.JSONDecode,http,data)
+	print(decoded,newdata)
 	if decoded then
 		settings.showdisplayname.Value = typeof(newdata.sdn) == "boolean" and newdata.sdn or settings.showdisplayname.Value
 		settings.showusername.Value = typeof(newdata.sun) == "boolean" and newdata.sun or settings.showusername.Value
