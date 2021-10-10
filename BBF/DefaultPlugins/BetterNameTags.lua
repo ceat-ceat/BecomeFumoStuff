@@ -44,12 +44,16 @@ end
 
 
 local success,data = pcall(readfile,"BBF_BNT_SETTINGS.json")
+print(succees,data)
 if success then
-	settings.showdisplayname.Value = typeof(data.sdn) == "boolean" and data.sdn or settings.showdisplayname.Value
-	settings.showusername.Value = typeof(data.sun) == "boolean" and data.sun or settings.showusername.Value
-	settings.reversenames.Value = typeof(data.rn) == "boolean" and data.rn or settings.reversenames.Value
-	settings.enabled.Value = typeof(data.enabled) == "boolean" and data.enabled or settings.enabled.Value
-	settings.copyusernameonclick.Value = typeof(data.cunoc) == "boolean" and data.cunoc or settings.copyusernameonclick.Value
+	local decoded,newdata = pcall(http.JSONDecode,http,data)
+	if decoded then
+		settings.showdisplayname.Value = typeof(newdata.sdn) == "boolean" and newdata.sdn or settings.showdisplayname.Value
+		settings.showusername.Value = typeof(newdata.sun) == "boolean" and newdata.sun or settings.showusername.Value
+		settings.reversenames.Value = typeof(newdata.rn) == "boolean" and newdata.rn or settings.reversenames.Value
+		settings.enabled.Value = typeof(newdata.enabled) == "boolean" and newdata.enabled or settings.enabled.Value
+		settings.copyusernameonclick.Value = typeof(newdata.cunoc) == "boolean" and newdata.cunoc or settings.copyusernameonclick.Value
+	end
 end
 
 local window = BBF.new("BetterNameTags",Vector2.new(0.25, 0.7))
