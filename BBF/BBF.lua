@@ -20,6 +20,7 @@ function tween(inst,prop,dur,dir,eas)
 	return ts:Create(inst,TweenInfo.new(dur,eas or Enum.EasingStyle.Quad,dir or Enum.EasingDirection.Out),prop)
 end
 
+if game.PlaceId ~= 6238705697 then return end
 if _G.BBF then return _G.BBF end
 local bbf = {}
 local localplayer = plrs.LocalPlayer
