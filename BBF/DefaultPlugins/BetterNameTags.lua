@@ -51,8 +51,9 @@ if success then
 			local setting,val = settings[v[2]],newdata[v[3]]
 			if typeof(val) ~= "boolean" then val = settings.Value end
 			setting.Value = val
-			if setting.Update then setting.Update(setting.Value) end
+			if setting.Update and v[2] ~= "showdisplayname" and v[2] ~= "showusername" then setting.Update(val) end
 		end
+		settings.showusername.Update()
 	end
 end
 
