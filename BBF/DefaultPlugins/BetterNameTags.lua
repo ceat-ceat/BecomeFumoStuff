@@ -1,5 +1,6 @@
 local plrs,http = game:GetService("Players"),game:GetService("HttpService")
 local BBF = loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/BecomeFumoStuff/main/BBF/BBF.lua"))()
+if not BBF then return end
 if _G.BBFbnt then BBF.warn("BetterNameTags is already running, silly!",3) return end
 local localplayer = plrs.LocalPlayer or plrs:GetPropertyChangedSignal("LocalPlayer"):Wait()
 _G.BBFbnt = true
