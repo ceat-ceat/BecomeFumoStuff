@@ -44,11 +44,8 @@ end
 
 
 local success,data = pcall(readfile,"BBF_BNT_SETTINGS.json")
-print(success,data)
 if success then
-	print("success")
 	local decoded,newdata = pcall(http.JSONDecode,http,data)
-	print(decoded,newdata)
 	if decoded then
 		settings.showdisplayname.Value = typeof(newdata.sdn) == "boolean" and newdata.sdn or settings.showdisplayname.Value
 		settings.showusername.Value = typeof(newdata.sun) == "boolean" and newdata.sun or settings.showusername.Value
@@ -65,6 +62,7 @@ for i = 1, 5 do
 	local j = BBF.createElement("Boolean w/ Label",{Default=setting.Value,Position=Vector2.new(0.133, 0.208+0.14*(i-1)),Size=Vector2.new(0.75, 0.104),ButtonSize=0.2,Text=settings.Ids[i][1],PropertyOverrides={
 		Parent = window.Frame
 	}})
+	setting.Update(setting.Value)
 	j.ValueChanged:Connect(function(value)
 		setting.Value = value
 		if setting.Update then setting.Update(value) end
