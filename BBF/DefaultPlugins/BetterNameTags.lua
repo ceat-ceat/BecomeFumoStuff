@@ -148,11 +148,11 @@ function setupplr(plr)
 	local function setupchr(chr)
 		local head = chr:WaitForChild("Head"):WaitForChild("Head")
 		nametag.Adornee = head
-		nametag.StudsOffset = realnametag.StudsOffset
 		info.Hovering = false
 		local realnametag = head:WaitForChild("NameTag",1)
 		if realnametag then
 			info.real,realnametag.Enabled = realnametag,not settings.enabled.Value
+			nametag.StudsOffset = realnametag.StudsOffset
 		end
 	end
 	if plr.Character then spawn(function() setupchr(plr.Character) end) end
