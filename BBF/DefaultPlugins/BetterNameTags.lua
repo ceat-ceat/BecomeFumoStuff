@@ -1,4 +1,4 @@
-local plrs,http = game:GetService("Players"),game:GetService("HttpService")
+local plrs,http,nc = game:GetService("Players"),game:GetService("HttpService"),game:GetService("NetworkClient")
 local BBF = loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/BecomeFumoStuff/main/BBF/BBF.lua"))()
 if not BBF then return end
 if _G.BBFbnt then BBF.warn("BetterNameTags is already running, silly!",3) return end
@@ -162,13 +162,15 @@ for i, v in next, plrs:GetPlayers() do
 end 
 plrs.PlayerAdded:Connect(setupplr)
 plrs.PlayerRemoving:Connect(function(plr)
-	if plr == localplayer then
+	nametags[plr].BB:Destroy()
+	nametags[plr] = nil
+end)
+nc.DescendantRemoving:Connect(function(inst)
+	if inst:IsA("ClientReplicator") then
 		local savedata = {}
 		for i, v in next, settings.Ids do
 			savedata[v[3]] = settings[v[2]].Value
 		end
 		pcall(writefile,"BBF_BNT_SETTINGS.json",http:JSONEncode(savedata))
 	end
-	nametags[plr].BB:Destroy()
-	nametags[plr] = nil
 end)
