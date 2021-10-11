@@ -149,13 +149,13 @@ function setupplr(plr)
 		toclipboard(plr.Name)
 	end)
 	local function setupchr(chr)
-		local head = chr:WaitForChild("Head"):WaitForChild("Head")
-		nametag.Adornee = head
-		info.Hovering = false
-		local realnametag = head:FindFirstChild("NameTag")
-		if realnametag then
-			info.real,realnametag.Enabled = realnametag,not settings.enabled.Value
-			nametag.StudsOffset = realnametag.StudsOffset
+		for i, v in next, chr:WaitForChild("Head"):GetChildren() do
+			if v.Name == "Head" and v:FindFirstChild("NameTag") then
+				local realnametag = v.NameTag
+				nametag.Adornee,nametag.StudsOffset,info.real = v,realnametag.StudsOffset,realnametag
+				realnametag.Enabled = not settings.enabled.Value
+				break
+			end
 		end
 	end
 	if plr.Character then setupchr(plr.Character) end
