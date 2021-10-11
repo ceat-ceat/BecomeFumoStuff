@@ -35,7 +35,10 @@ local settings do
 		copyusernameonclick = {Value=true},
 		enabled = {Value=true,Update=function(value)
 			for i, v in next, nametags do
-				v.BB.Enabled,v.real.Enabled  = value,not value
+				v.BB.Enabled  = value
+				if v.real then
+					v.real.Enabled = not value
+				end
 			end
 		end},
 		buttons = {},
@@ -149,13 +152,13 @@ function setupplr(plr)
 		local head = chr:WaitForChild("Head"):WaitForChild("Head")
 		nametag.Adornee = head
 		info.Hovering = false
-		local realnametag = head:WaitForChild("NameTag",1)
+		local realnametag = head:FindFirstChild("NameTag")
 		if realnametag then
 			info.real,realnametag.Enabled = realnametag,not settings.enabled.Value
 			nametag.StudsOffset = realnametag.StudsOffset
 		end
 	end
-	if plr.Character then spawn(function() setupchr(plr.Character) end) end
+	if plr.Character then setupchr(plr.Character) end
 	plr.CharacterAdded:Connect(setupchr)
 end
 
