@@ -155,7 +155,7 @@ function setupplr(plr)
 			info.real,realnametag.Enabled = realnametag,not settings.enabled.Value
 		end
 	end
-	if plr.Character then setupchr(plr.Character) end
+	if plr.Character then spawn(function() setupchr(plr.Character) end) end
 	plr.CharacterAdded:Connect(setupchr)
 end
 
