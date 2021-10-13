@@ -84,6 +84,7 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 function setupplr(plr)
 	local nametag = BBF.create{
 		Class = "BillboardGui",
+		LightInfluence = 1,
 		Size = UDim2.new(2, 0,0.5, 0),
 		StudsOffset = Vector3.new(0, 1.5, 0),
 		Parent = screengui,
