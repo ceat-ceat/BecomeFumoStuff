@@ -1,4 +1,4 @@
-local plrs,ts,startergui,rs = game:GetService("Players"),game:GetService("TweenService"),game:GetService("StarterGui"),game:GetService("ReplicatedStorage")
+local plrs,ts,startergui,rs,run = game:GetService("Players"),game:GetService("TweenService"),game:GetService("StarterGui"),game:GetService("ReplicatedStorage"),game:GetService("RunService")
 
 function create(tree,parent)
 	local inst = Instance.new(tree.Class)
@@ -20,7 +20,7 @@ function tween(inst,prop,dur,dir,eas)
 	return ts:Create(inst,TweenInfo.new(dur,eas or Enum.EasingStyle.Quad,dir or Enum.EasingDirection.Out),prop)
 end
 
-if game.PlaceId ~= 6238705697 then return end
+if game.PlaceId ~= 6238705697 and not run:IsStudio() then return end
 if _G.BBF then return _G.BBF end
 local bbf = {}
 local localplayer = plrs.LocalPlayer
@@ -254,6 +254,15 @@ local presets = {
 			}
 		}
 	},
+	textbox = {
+		Class = "TextBox",
+		BackgroundTransparency = 0.95,
+		BorderColor3 = Color3.fromRGB(255, 255, 255),
+		Size = UDim2.new(1, 0,0.3, 0),
+		Font = Enum.Font.Bodoni,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextScaled = true
+	},
 }
 
 local elements do
@@ -433,7 +442,12 @@ local elements do
 			return label
 		end,
 		TextBox = function(params)
-
+			params.Position,params.Size = typeof(params.Position) == "Vector2" and params.Position or Vector2.new(),typeof(params.Size) == "Vector2" and params.Size or Vector2.new()
+			local new = create(presets.textbox)
+			new.Position,new.Size,new.PlaceholderText = UDim2.new(params.Position.X, 0,params.Position.Y, 0),UDim2.new(params.Size.X, 0,params.Size.Y, 0),params.PlaceHolderText == nil and "" or tostring(params.PlaceHolderText)
+			new.Text = ""
+			override(new,params.PropertyOverrides)
+			return new
 		end,
 		List = function(params)
 			params.Position,params.Size,params.Padding,params.SortOrder = typeof(params.Position) == "Vector2" and params.Position or Vector2.new(),typeof(params.Size) == "Vector2" and params.Size or Vector2.new(),typeof(params.Padding) == "UDim" and params.Padding or UDim.new(),table.find(reference.SortOrders,params.SortOrder) and params.SortOrder or Enum.SortOrder.LayoutOrder
@@ -598,5 +612,5 @@ bbf.create,bbf.tween,bbf.Screen = create,tween,screengui
 _G.BBF = bbf
 
 if not game:IsLoaded() then game.Loaded:Wait() end
-bbf.notify("BBF Beta ver is now running successfully!",3)
+bbf.notify("BBF Beta ver 2 is now running successfully!",3)
 return _G.BBF
