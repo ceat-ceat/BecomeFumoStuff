@@ -85,8 +85,10 @@ function engine:Hook()
 		Parent = chr,
 		Name = "BFAnimConstraints"
 	})
+	local chrscale = chr.HumanoidRootPart.Size.Z/0.598
 	for i, v in next, data.Parts do
-		bindpart(v.AnchorPart,v.Part,config.AttachmentOffsets[i]:Inverse(),i)
+		local baseoffset = config.AttachmentOffsets[i]
+		bindpart(v.AnchorPart,v.Part,CFrame.new(baseoffset.X*chrscale,baseoffset.Y*chrscale,baseoffset.Z*chrscale):Inverse(),i)
 	end
 	for i, v in next, chr.Torso.Torso:GetChildren() do
 		if v:IsA("Motor6D") then
