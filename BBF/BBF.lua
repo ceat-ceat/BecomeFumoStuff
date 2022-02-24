@@ -36,25 +36,17 @@ local screengui = create{
 local open = false
 local reference = {SortOrders=Enum.SortOrder:GetEnumItems()}
 
+--local baseinstance = require(script:WaitForChild("BaseInstance"))
 local baseinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/roblox-script-utils/main/custominstance.lua"))()
+--require(script:WaitForChild("FakeBindable"))
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ceat-ceat/roblox-script-utils/main/fakebindable.lua"))()
 
 -- ui setup
-
 local settingsframe = maingui:WaitForChild("SettingsFrame")
-local closeevent = settingsframe:WaitForChild("Close")
-local button = create{
-	Class = "TextButton",
-	BackgroundTransparency = 0.95,
-	BorderColor3 = Color3.fromRGB(255, 255, 255),
-	Size = UDim2.new(0.85, 0,0.045, 0),
-	Font = Enum.Font.Bodoni,
-	Text = "become fumo but i added stuff to it",
-	TextColor3 = Color3.fromRGB(255, 255, 255),
-	TextScaled = true,
-	Name = "zBBF",
-	Parent = settingsframe:WaitForChild("ScrollingFrame")
-}
+local openval = maingui:WaitForChild("SettingsFrameOpen")
+local button = settingsframe.ScrollingFrame.BlockPlayer:Clone()
+button.LocalScript:Destroy()
+button.Parent,button.Text,button.Name = settingsframe.ScrollingFrame,"become fumo but i added stuff to it","zBBF"
 
 local frame = create{
 	Class = "Frame",
@@ -142,7 +134,7 @@ local tweens = {
 button.MouseButton1Click:Connect(function()
 	open = not open
 	tweens[open]:Play()
-	closeevent:Fire()
+	openval.Value = false
 end)
 frame.Close.MouseButton1Click:Connect(function()
 	open = false
@@ -612,5 +604,5 @@ bbf.create,bbf.tween,bbf.Screen = create,tween,screengui
 _G.BBF = bbf
 
 if not game:IsLoaded() then game.Loaded:Wait() end
-bbf.notify("BBF Beta ver 2 is now running successfully!",3)
+bbf.notify("BBF Beta ver 3 is now running successfully!",3)
 return _G.BBF
