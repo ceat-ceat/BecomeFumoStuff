@@ -108,7 +108,7 @@ function engine:Hook()
 		run.Heartbeat:Connect(function()
 			for i, v in next, data.Parts do
 				if v.Part.Velocity == Vector3.new() then
-					v.Part.Velocity += Vector3.new(0,7,0)	
+					v.Part.Velocity = Vector3.new(0,0,45)	
 				end
 			end
 		end)
