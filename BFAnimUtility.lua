@@ -113,6 +113,10 @@ function engine:Hook()
 			end
 		end)
 	}
+	pcall(function()
+   		settings().Physics.AllowSleep = false
+		settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
+	end)
 end
 
 function engine:AddPart(name,params)
