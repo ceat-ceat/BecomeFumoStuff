@@ -13,6 +13,8 @@ local cn = CFrame.new
 
 if _G.BFAnim then return _G.BFAnim end
 
+local shp = sethiddenproperty or set_hidden_property or set_hidden_prop or sethiddenprop
+
 local engine = {
 	Offsets = {Head=cn(),Torso=cn(),LArm=cn(),RArm=cn(),LLeg=cn(),RLeg=cn()}, -- this offsets table is fallback
 	__tostring = function()
@@ -98,6 +100,9 @@ function engine:Hook()
 	chr.HumanoidRootPart.Torso:Destroy()
 	connections = {
 		run.Stepped:Connect(function()
+			if shp then
+				shp(localplayer, "SimulationRadius", math.huge)
+			end
 			for i, v in next, data.Parts do
 				local offset = _G.BFAnim.Offsets[i]
 				if offset and typeof(offset) == "CFrame" and v.Mover then
@@ -111,7 +116,7 @@ function engine:Hook()
 					v.Part.Velocity = Vector3.new(0,0,45)	
 				end
 			end
-		end)
+		end),
 	}
 	pcall(function()
    		settings().Physics.AllowSleep = false
