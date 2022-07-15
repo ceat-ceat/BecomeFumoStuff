@@ -178,9 +178,7 @@ function constructor.new(jointtoreplace: Motor6D?): Motor6D
 		new.C1 = jointtoreplace.C1
 		new.Transform = jointtoreplace.Transform
 		
-		delay(1,function()
-			jointtoreplace:Destroy()
-		end)
+		jointtoreplace:Destroy()
 	end
 	
 	return new
