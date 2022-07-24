@@ -13,7 +13,7 @@ Joint - same as motor6ds
 	
 <Joint> constructor.new(Motor6D)
 	creates a joint that copies the motor6d
-	and then remoevs the motor6d
+	and then removes the motor6d
 	
 ]]
 
