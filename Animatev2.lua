@@ -4,9 +4,9 @@ by ceat_ceat (userid: 145632006)
 Joint - same as motor6ds
 	<BasePart> Part0
 	<BasePart> Part1
-	<BasePart> C0
-	<BasePart> C1
-	<BasePart> Transform
+	<CFrame> C0
+	<CFrame> C1
+	<CFrame> Transform
 
 <Joint> constructor.new()
 	creates a blank joint
